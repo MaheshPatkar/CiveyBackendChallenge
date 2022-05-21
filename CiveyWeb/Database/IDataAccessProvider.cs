@@ -9,6 +9,10 @@ namespace CiveyWeb.Database
 
         List<PollDtoModel> GetPollRecordsByPageNumberAndPageSize(int pageNumber,int pageSize);
 
+        List<PollDtoModel> GetPollRecordsBySearchingPolls(string searchText);
+
+        List<PollDtoModel> GetPollRecordsByAnsers(string searchText);
+
         PollDtoModel GetPollRecordById(int id);
 
         void AddPollRecord(PollDtoModel poll);

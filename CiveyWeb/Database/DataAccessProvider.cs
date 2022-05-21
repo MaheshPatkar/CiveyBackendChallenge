@@ -54,5 +54,22 @@ namespace CiveyWeb.Database
             _context.answer.Add(answer);
             _context.SaveChanges();
             }
+
+        public List<PollDtoModel> GetPollRecordsBySearchingPolls(string searchText)
+            {
+             return _context.poll.Where(x => x.text.Contains(searchText)).ToList() ;
+            }
+
+        public List<PollDtoModel> GetPollRecordsByAnsers(string searchText)
+            {
+              var answers =  _context.answer.Where(t => t.text.Contains(searchText)).ToList();
+
+            List<PollDtoModel> pollDtoModels = new List<PollDtoModel>();
+              foreach(var answer in answers)
+                {
+                pollDtoModels.Add(_context.poll.FirstOrDefault(x => x.id == answer.poll_id));
+                }
+            return pollDtoModels;
+            }
         }
     }

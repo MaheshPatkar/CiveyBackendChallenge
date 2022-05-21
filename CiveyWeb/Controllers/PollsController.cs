@@ -23,10 +23,82 @@ namespace CiveyWeb.Controllers
             _dataAccessProvider = dataAccessProvider;
             }
         [HttpGet("{pageNumber?}/{pageSize?}")]
-        public async Task<IEnumerable<PollModel>> Get(int pageNumber, int pageSize )
+        public async Task<IEnumerable<PollModel>> Get(int pageNumber, int pageSize)
             {
             List<PollModel> lstpolls = new List<PollModel>();
             List<PollDtoModel> pollDtoModel = _dataAccessProvider.GetPollRecordsByPageNumberAndPageSize(pageNumber, pageSize);
+
+            foreach (var item in pollDtoModel)
+                {
+
+                List<AnswersDtoModel> answerDtoModels = _dataAccessProvider.GetAnswerRecordByPollId(item.id);
+
+                List<AnswerModel> lstanswer = new List<AnswerModel>();
+
+                foreach (var answerModel in answerDtoModels)
+                    {
+                    lstanswer.Add(new AnswerModel { Id = answerModel.id, Text = answerModel.text });
+                    }
+
+
+                lstpolls.Add(
+                    new PollModel
+                        {
+                        Id = item.id,
+                        Text = item.text,
+                        MultiChoice = item.multi_choice,
+                        Answers = lstanswer
+
+                        }
+                    );
+                }
+
+            return lstpolls;
+
+            }
+
+
+        [HttpGet("poll/{searchpoll}")]
+        public async Task<IEnumerable<PollModel>> GetBySearchingPolls(string  searchpoll)
+            {
+            List<PollModel> lstpolls = new List<PollModel>();
+            List<PollDtoModel> pollDtoModel = _dataAccessProvider.GetPollRecordsBySearchingPolls(searchpoll);
+
+            foreach (var item in pollDtoModel)
+                {
+
+                List<AnswersDtoModel> answerDtoModels = _dataAccessProvider.GetAnswerRecordByPollId(item.id);
+
+                List<AnswerModel> lstanswer = new List<AnswerModel>();
+
+                foreach (var answerModel in answerDtoModels)
+                    {
+                    lstanswer.Add(new AnswerModel { Id = answerModel.id, Text = answerModel.text });
+                    }
+
+
+                lstpolls.Add(
+                    new PollModel
+                        {
+                        Id = item.id,
+                        Text = item.text,
+                        MultiChoice = item.multi_choice,
+                        Answers = lstanswer
+
+                        }
+                    );
+                }
+
+            return lstpolls;
+
+            }
+
+
+        [HttpGet("ans/{searchanswers}")]
+        public async Task<IEnumerable<PollModel>> GetBySearchingAnswers(string searchanswers)
+            {
+            List<PollModel> lstpolls = new List<PollModel>();
+            List<PollDtoModel> pollDtoModel = _dataAccessProvider.GetPollRecordsByAnsers(searchanswers);
 
             foreach (var item in pollDtoModel)
                 {
